@@ -3,7 +3,7 @@
 # - use py_logging_init() to initialize the py_logging system
 #
 # - call the appropriate helper function found at the bottom of
-#   this file (e.g. py_log_mainframe(), py_log_database() etc)
+#   this file (e.g. py_log_general() etc)
 #   with a severity level and message
 #
 # - logging system uses supplied (default if none) config to check
@@ -42,8 +42,6 @@ from enum import Enum
 
 # Log file strings
 LOG_FOLDER = "logging/"
-MAINFRAME_LOG = LOG_FOLDER + "mainframe.log"
-DATABASE_LOG = LOG_FOLDER + "database.log"
 GENERAL_LOG = LOG_FOLDER + "general.log"
 
 
@@ -59,9 +57,7 @@ class LogType(Enum):
     """
     Types of logging
     """
-    MAINFRAME = 0
-    DATABASE = 1
-    GENERAL = 2
+    GENERAL = 0
 
 
 class LogLevel(Enum):
@@ -231,14 +227,6 @@ _SESSION = None
 DEFAULT_CONFIG = {
     KEY_EMAIL:  None,
     KEY_TYPES: {
-        LogType.MAINFRAME.name: {
-                KEY_TOFILE: LogLevel.DEBUG.name,
-                KEY_NOTIFY: LogLevel.CRITICAL.name
-            },
-        LogType.DATABASE.name: {
-                KEY_TOFILE: LogLevel.DEBUG.name,
-                KEY_NOTIFY: LogLevel.CRITICAL.name
-            },
         LogType.GENERAL.name: {
                 KEY_TOFILE: LogLevel.DEBUG.name,
                 KEY_NOTIFY: LogLevel.CRITICAL.name
@@ -317,20 +305,6 @@ def py_logging_close():
 # Below are helper functions for sending
 # logs for predefined log types to the
 # global logging session
-def py_log_mainframe(log_level, message):
-    _SESSION.log_to(
-        LogObject(LogType.MAINFRAME, MAINFRAME_LOG, 5),
-        log_level,
-        message
-    )
-
-def py_log_database(log_level, message):
-    _SESSION.log_to(
-        LogObject(LogType.DATABASE, DATABASE_LOG, 5),
-        log_level,
-        message
-    )
-
 def py_log_general(log_level, message):
     _SESSION.log_to(
         LogObject(LogType.GENERAL, GENERAL_LOG, 5),
